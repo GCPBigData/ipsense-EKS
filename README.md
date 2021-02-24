@@ -1,5 +1,7 @@
 # ipsense-EKS
 
+![](logo.png)
+
 ## Depuração de pods e contêineres
 
 # Logs de contêineres
