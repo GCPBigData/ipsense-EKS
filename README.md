@@ -92,17 +92,21 @@ kubectl logs ${POD_NAME} ${CONTAINER_NAME}
 Se seu contêiner já travou, você pode acessar o registro de falha do contêiner anterior com:
 
 kubectl logs --previous ${POD_NAME} ${CONTAINER_NAME}
+
 Depurando com o Container Exec
 Se o imagem do recipienteinclui utilitários de depuração, como é o caso de imagens criadas a partir de imagens de base dos sistemas operacionais Linux e Windows, você pode executar comandos dentro de um contêiner específico com kubectl exec:
 
 kubectl exec ${POD_NAME} -c ${CONTAINER_NAME} -- ${CMD} ${ARG1} ${ARG2} ... ${ARGN}
+
 Nota: -c ${CONTAINER_NAME} é opcional. Você pode omiti-lo para pods que contêm apenas um único contêiner.
 Por exemplo, para ver os registros de um pod do Cassandra em execução, você pode executar
 
 kubectl exec cassandra -- cat /var/log/cassandra/system.log
+
 Você pode executar um shell conectado ao seu terminal usando os argumentos -ie -tpara kubectl exec, por exemplo:
 
 kubectl exec -it cassandra -- sh
+
 Para obter mais detalhes, consulte Obter um shell para um contêiner em execução .
 
 Depuração com um contêiner de depuração efêmero
@@ -114,15 +118,18 @@ Observação: os exemplos nesta seção exigem o EphemeralContainers gate de rec
 Você pode usar o kubectl debugcomando para adicionar contêineres efêmeros a um pod em execução. Primeiro, crie um pod para o exemplo:
 
 kubectl run ephemeral-demo --image=k8s.gcr.io/pause:3.1 --restart=Never
+
 Os exemplos nesta seção usam a pauseimagem do contêiner porque ela não contém utilitários de depuração do espaço do usuário, mas esse método funciona com todas as imagens do contêiner.
 
 Se você tentar usar kubectl execpara criar um shell, verá um erro porque não há shell nesta imagem de contêiner.
 
 kubectl exec -it ephemeral-demo -- sh
+
 OCI runtime exec failed: exec failed: container_linux.go:346: starting container process caused "exec: \"sh\": executable file not found in $PATH": unknown
 Em vez disso, você pode adicionar um contêiner de depuração usando kubectl debug. Se você especificar o argumento -i/ --interactive, kubectlserá automaticamente anexado ao console do Recipiente Ephemeral.
 
 kubectl debug -it ephemeral-demo --image=busybox --target=ephemeral-demo
+
 Defaulting debug container name to debugger-8xzrl.
 If you don't see a command prompt, try pressing enter.
 / #
@@ -158,9 +165,11 @@ Copiar um pod ao adicionar um novo contêiner Adicionar um novo contêiner pode 
 Por exemplo, talvez as imagens de contêiner do seu aplicativo sejam criadas, busybox mas você precise de utilitários de depuração não incluídos em busybox. Você pode simular este cenário usando kubectl run:
 
 kubectl run myapp --image=busybox --restart=Never -- sleep 1d
+
 Execute este comando para criar uma cópia do myappnamed myapp-debugque adiciona um novo contêiner do Ubuntu para depuração:
 
 kubectl debug myapp -it --image=ubuntu --share-processes --copy-to=myapp-debug
+
 Defaulting debug container name to debugger-w7xmf.
 If you don't see a command prompt, try pressing enter.
 root@myapp-debug:/#
@@ -179,6 +188,7 @@ Copiar um pod enquanto muda seu comando
 Para simular um aplicativo com falha, use kubectl runpara criar um contêiner que sai imediatamente:
 
 kubectl run --image=busybox myapp -- false
+
 Você pode ver kubectl describe pod myappque este contêiner está travando:
 
 Containers:
@@ -195,6 +205,7 @@ Containers:
 Você pode usar kubectl debugpara criar uma cópia deste pod com o comando alterado para um shell interativo:
 
 kubectl debug myapp -it --copy-to=myapp-debug --container=myapp -- sh
+
 If you don't see a command prompt, try pressing enter.
 / #
 Agora você tem um shell interativo que pode usar para realizar tarefas como verificar caminhos do sistema de arquivos ou executar o comando do contêiner manualmente.
@@ -205,15 +216,18 @@ O -isinalizador faz kubectl debugcom que seja anexado ao contêiner por padrão.
 Não se esqueça de limpar o pod de depuração quando terminar:
 
 kubectl delete pod myapp myapp-debug
+
 Copiar um pod ao alterar as imagens do contêiner
 Em algumas situações, você pode querer alterar um pod com comportamento incorreto de suas imagens de contêiner de produção normal para uma imagem contendo uma compilação de depuração ou utilitários adicionais.
 
 Por exemplo, crie um pod usando kubectl run:
 
 kubectl run myapp --image=busybox --restart=Never -- sleep 1d
+
 Agora use kubectl debugpara fazer uma cópia e alterar sua imagem de contêiner para ubuntu:
 
 kubectl debug myapp --copy-to=myapp-debug --set-image=*=ubuntu
+
 A sintaxe de --set-imageusa a mesma container_name=imagesintaxe de kubectl set image. *=ubuntusignifica alterar a imagem de todos os contêineres para ubuntu.
 
 Não se esqueça de limpar o pod de depuração quando terminar:
@@ -223,6 +237,7 @@ Depuração por meio de um shell no nó
 Se nenhuma dessas abordagens funcionar, você pode encontrar o nó no qual o pod está sendo executado e criar um pod privilegiado em execução nos namespaces do host. Para criar um shell interativo em um nó usando kubectl debug, execute:
 
 kubectl debug node/mynode -it --image=ubuntu
+
 Creating debugging pod node-debugger-mynode-pdx84 with container debugger on node mynode.
 If you don't see a command prompt, try pressing enter.
 root@ek8s:/#
