@@ -76,7 +76,7 @@ kubectl cluster-info dump                                             # Dump cur
 kubectl cluster-info dump --output-directory=/path/to/cluster-state   # Dump current cluster state to /path/to/cluster-state
 
 
-# If a taint with that key and effect already exists, its value is replaced as specified.
+# Se uma mancha com aquela chave e efeito já existe, seu valor é substituído conforme especificado.
 kubectl taint nodes foo dedicated=special-user:NoSchedule
 
 ## Depurar pods em execução
@@ -150,11 +150,10 @@ Ephemeral Containers:
 Use kubectl deletepara remover o pod quando terminar:
 
 kubectl delete pod ephemeral-demo
-Depuração usando uma cópia do pod
-Às vezes, as opções de configuração do pod dificultam a solução de problemas em certas situações. Por exemplo, você não pode executar kubectl execpara solucionar problemas do seu contêiner se a imagem do contêiner não incluir um shell ou se seu aplicativo travar na inicialização. Nessas situações, você pode usar kubectl debugpara criar uma cópia do pod com valores de configuração alterados para ajudar na depuração.
 
-Copiar um pod ao adicionar um novo contêiner
-Adicionar um novo contêiner pode ser útil quando seu aplicativo está em execução, mas não está se comportando como esperado e você gostaria de adicionar outros utilitários de solução de problemas ao pod.
+Depuração usando uma cópia do pod Às vezes, as opções de configuração do pod dificultam a solução de problemas em certas situações. Por exemplo, você não pode executar kubectl execpara solucionar problemas do seu contêiner se a imagem do contêiner não incluir um shell ou se seu aplicativo travar na inicialização. Nessas situações, você pode usar kubectl debugpara criar uma cópia do pod com valores de configuração alterados para ajudar na depuração.
+
+Copiar um pod ao adicionar um novo contêiner Adicionar um novo contêiner pode ser útil quando seu aplicativo está em execução, mas não está se comportando como esperado e você gostaria de adicionar outros utilitários de solução de problemas ao pod.
 
 Por exemplo, talvez as imagens de contêiner do seu aplicativo sejam criadas, busybox mas você precise de utilitários de depuração não incluídos em busybox. Você pode simular este cenário usando kubectl run:
 
@@ -165,7 +164,9 @@ kubectl debug myapp -it --image=ubuntu --share-processes --copy-to=myapp-debug
 Defaulting debug container name to debugger-w7xmf.
 If you don't see a command prompt, try pressing enter.
 root@myapp-debug:/#
+
 Observação:
+
 kubectl debuggera automaticamente um nome de contêiner se você não escolher um usando o --containersinalizador.
 O -isinalizador faz kubectl debugcom que seja anexado ao novo contêiner por padrão. Você pode evitar isso especificando --attach=false. Se sua sessão for desconectada, você pode reconectá-la usando kubectl attach.
 O --share-processespermite que os contentores desta vagem para ver os processos dos outros recipientes no vagem. Para obter mais informações sobre como isso funciona, consulte Compartilhar namespace de processo entre contêineres em um pod .
