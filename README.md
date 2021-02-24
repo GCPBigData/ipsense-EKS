@@ -17,37 +17,64 @@ kubectl -n logs <pod-name> --container <container-name>.
 ## Interagindo com pods em execução
 
 kubectl logs my-pod                                 # dump pod logs (stdout)
+
 kubectl logs -l name=myLabel                        # dump pod logs, with label name=myLabel (stdout)
+
 kubectl logs my-pod --previous                      # dump pod logs (stdout) for a previous instantiation of a container
+
 kubectl logs my-pod -c my-container                 # dump pod container logs (stdout, multi-container case)
+
 kubectl logs -l name=myLabel -c my-container        # dump pod logs, with label name=myLabel (stdout)
+
 kubectl logs my-pod -c my-container --previous      # dump pod container logs (stdout, multi-container case) for a previous instantiation of a container
+
 kubectl logs -f my-pod                              # stream pod logs (stdout)
+
 kubectl logs -f my-pod -c my-container              # stream pod container logs (stdout, multi-container case)
+
 kubectl logs -f -l name=myLabel --all-containers    # stream all pods logs with label name=myLabel (stdout)
+
 kubectl run -i --tty busybox --image=busybox -- sh  # Run pod as interactive shell
+
 kubectl run nginx --image=nginx -n 
+
 mynamespace                                         # Run pod nginx in a specific namespace
+
 kubectl run nginx --image=nginx                     # Run pod nginx and write its spec into a file called pod.yaml
 --dry-run=client -o yaml > pod.yaml
 
 kubectl attach my-pod -i                            # Attach to Running Container
+
 kubectl port-forward my-pod 5000:6000               # Listen on port 5000 on the local machine and forward to port 6000 on my-pod
+
 kubectl exec my-pod -- ls /                         # Run command in existing pod (1 container case)
+
 kubectl exec --stdin --tty my-pod -- /bin/sh        # Interactive shell access to a running pod (1 container case) 
+
 kubectl exec my-pod -c my-container -- ls /         # Run command in existing pod (multi-container case)
+
 kubectl top pod POD_NAME --containers               # Show metrics for a given pod and its containers
+
 kubectl top pod POD_NAME --sort-by=cpu              # Show metrics for a given pod and sort it by 'cpu' or 'memory'
+
 
 ## Interagindo com nós e cluster 
 
 kubectl cordon my-node                                                # Mark my-node as unschedulable
-kubectl drain my-node                                                 # Drain my-node in preparation for maintenance
+
+kubectl drain my-node                                                 # Drain my-node in preparation for 
+maintenance
+
 kubectl uncordon my-node                                              # Mark my-node as schedulable
+
 kubectl top node my-node                                              # Show metrics for a given node
+
 kubectl cluster-info                                                  # Display addresses of the master and services
+
 kubectl cluster-info dump                                             # Dump current cluster state to stdout
+
 kubectl cluster-info dump --output-directory=/path/to/cluster-state   # Dump current cluster state to /path/to/cluster-state
+
 
 # If a taint with that key and effect already exists, its value is replaced as specified.
 kubectl taint nodes foo dedicated=special-user:NoSchedule
